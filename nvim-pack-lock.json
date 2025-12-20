@@ -53,7 +53,7 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "orgmode": {
-      "rev": "9fdc30e05378691e8c51a22113fc22e30cdc14cc",
+      "rev": "3a63f7ce8ebd38063afe43d6a2b0589f3d7d71d5",
       "src": "https://github.com/nvim-orgmode/orgmode"
     },
     "plenary.nvim": {

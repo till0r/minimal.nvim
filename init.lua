@@ -117,10 +117,10 @@ vim.opt.hlsearch = true
 vim.opt.wrap = true
 
 -- formatting
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
-vim.opt.textwidth = 80
+vim.opt.softtabstop = 4
 
 vim.diagnostic.config({
   signs = {
@@ -136,6 +136,22 @@ vim.diagnostic.config({
 
 -- clear search highlights with <Esc>
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+-- Autosave on InsertLeave or TextChanged
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+  pattern = '*',
+  callback = function()
+    if vim.bo.modified and vim.bo.filetype ~= '' and vim.fn.expand '%' ~= '' then
+      vim.cmd 'silent! write'
+    end
+  end,
+})
+
+-- Autoread changes
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
+  command = 'checktime',
+})
 
 -- INFO: plugins
 -- we install plugins with neovim's builtin package manager: vim.pack
