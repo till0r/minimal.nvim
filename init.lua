@@ -241,7 +241,8 @@ local lsp_servers = {
     Lua = { workspace = { library = vim.api.nvim_get_runtime_file("lua", true) }, },
   },
   clangd = {},
-  basedpyright = {}
+  ty = {},
+  ruff = {}
 }
 
 vim.pack.add({
