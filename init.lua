@@ -123,15 +123,15 @@ vim.opt.expandtab = true
 vim.opt.softtabstop = 4
 
 vim.diagnostic.config({
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = " ",
-      [vim.diagnostic.severity.WARN] = " ",
-      [vim.diagnostic.severity.INFO] = " ",
-      [vim.diagnostic.severity.HINT] = " ",
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = " ",
+            [vim.diagnostic.severity.WARN] = " ",
+            [vim.diagnostic.severity.INFO] = " ",
+            [vim.diagnostic.severity.HINT] = " ",
+        },
     },
-  },
-  virtual_text = true, -- show inline diagnostics
+    virtual_text = true, -- show inline diagnostics
 })
 
 -- clear search highlights with <Esc>
@@ -139,18 +139,18 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Autosave on InsertLeave or TextChanged
 vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
-  pattern = '*',
-  callback = function()
-    if vim.bo.modified and vim.bo.filetype ~= '' and vim.fn.expand '%' ~= '' then
-      vim.cmd 'silent! write'
-    end
-  end,
+    pattern = '*',
+    callback = function()
+        if vim.bo.modified and vim.bo.filetype ~= '' and vim.fn.expand '%' ~= '' then
+            vim.cmd 'silent! write'
+        end
+    end,
 })
 
 -- Autoread changes
 vim.o.autoread = true
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
-  command = 'checktime',
+    command = 'checktime',
 })
 
 -- INFO: plugins
@@ -179,56 +179,57 @@ vim.pack.add({ "https://github.com/nvim-treesitter/nvim-treesitter" }, { confirm
 require("nvim-treesitter.install").update("all")
 
 require("nvim-treesitter.configs").setup({
-  sync_install = true,
+    sync_install = true,
 
-  modules = {},
-  ignore_install = {},
+    modules = {},
+    ignore_install = {},
 
-  ensure_installed = {
-    "lua",
-    "c",
-    "python",
-  },
+    ensure_installed = {
+        "lua",
+        "c",
+        "python",
+        "ledger"
+    },
 
-  auto_install = true, -- autoinstall languages that are not installed yet
+    auto_install = true, -- autoinstall languages that are not installed yet
 
-  highlight = {
-    enable = true,
-  },
+    highlight = {
+        enable = true,
+    },
 })
 
 -- INFO: completion engine
 vim.pack.add({ "https://github.com/saghen/blink.cmp" }, { confirm = false })
 
 require("blink.cmp").setup({
-  completion = {
-    documentation = {
-      auto_show = true,
+    completion = {
+        documentation = {
+            auto_show = true,
+        },
     },
-  },
 
-  keymap = {
-    ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
-    ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
-    ['<C-y>'] = { 'select_and_accept', 'fallback' },
-    ['<C-e>'] = { 'cancel', 'fallback' },
+    keymap = {
+        ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+        ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+        ['<C-y>'] = { 'select_and_accept', 'fallback' },
+        ['<C-e>'] = { 'cancel', 'fallback' },
 
-    ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
-    ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
-    ['<CR>'] = { 'select_and_accept', 'fallback' },
-    ['<Esc>'] = { 'cancel', 'hide_documentation', 'fallback' },
+        ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
+        ['<CR>'] = { 'select_and_accept', 'fallback' },
+        ['<Esc>'] = { 'cancel', 'hide_documentation', 'fallback' },
 
-    ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
 
-    ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
-    ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
-    ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
-  },
+        ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
+    },
 
-  fuzzy = {
-    implementation = "lua",
-  },
+    fuzzy = {
+        implementation = "lua",
+    },
 })
 
 -- INFO: lsp server installation and configuration
@@ -236,48 +237,48 @@ require("blink.cmp").setup({
 -- lsp servers we want to use and their configuration
 -- see `:h lspconfig-all` for available servers and their settings
 local lsp_servers = {
-  lua_ls = {
-    -- https://luals.github.io/wiki/settings/ | `:h nvim_get_runtime_file`
-    Lua = { workspace = { library = vim.api.nvim_get_runtime_file("lua", true) }, },
-  },
-  clangd = {},
-  ty = {},
-  ruff = {}
+    lua_ls = {
+        -- https://luals.github.io/wiki/settings/ | `:h nvim_get_runtime_file`
+        Lua = { workspace = { library = vim.api.nvim_get_runtime_file("lua", true) }, },
+    },
+    clangd = {},
+    ty = {},
+    ruff = {}
 }
 
 vim.pack.add({
-  "https://github.com/neovim/nvim-lspconfig", -- default configs for lsps
+    "https://github.com/neovim/nvim-lspconfig", -- default configs for lsps
 
-  -- NOTE: if you'd rather install the lsps through your OS package manager you
-  -- can delete the next three mason-related lines and their setup calls below.
-  -- see `:h lsp-quickstart` for more details.
-  "https://github.com/mason-org/mason.nvim",                     -- package manager
-  "https://github.com/mason-org/mason-lspconfig.nvim",           -- lspconfig bridge
-  "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" -- auto installer
+    -- NOTE: if you'd rather install the lsps through your OS package manager you
+    -- can delete the next three mason-related lines and their setup calls below.
+    -- see `:h lsp-quickstart` for more details.
+    "https://github.com/mason-org/mason.nvim",                   -- package manager
+    "https://github.com/mason-org/mason-lspconfig.nvim",         -- lspconfig bridge
+    "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" -- auto installer
 }, { confirm = false })
 
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-tool-installer").setup({
-  ensure_installed = vim.tbl_keys(lsp_servers),
+    ensure_installed = vim.tbl_keys(lsp_servers),
 })
 
 -- configure each lsp server on the table
 -- to check what clients are attached to the current buffer, use
 -- `:checkhealth vim.lsp`. to view default lsp keybindings, use `:h lsp-defaults`.
 for server, config in pairs(lsp_servers) do
-  vim.lsp.config(server, {
-    settings = config,
+    vim.lsp.config(server, {
+        settings = config,
 
-    -- only create the keymaps if the server attaches successfully
-    on_attach = function(_, bufnr)
-      vim.keymap.set("n", "grd", vim.lsp.buf.definition,
-        { buffer = bufnr, desc = "vim.lsp.buf.definition()", })
+        -- only create the keymaps if the server attaches successfully
+        on_attach = function(_, bufnr)
+            vim.keymap.set("n", "grd", vim.lsp.buf.definition,
+                { buffer = bufnr, desc = "vim.lsp.buf.definition()", })
 
-      vim.keymap.set("n", "grf", vim.lsp.buf.format,
-        { buffer = bufnr, desc = "vim.lsp.buf.format()", })
-    end,
-  })
+            vim.keymap.set("n", "grf", vim.lsp.buf.format,
+                { buffer = bufnr, desc = "vim.lsp.buf.format()", })
+        end,
+    })
 end
 
 -- NOTE: if all you want is lsp + completion + highlighting, you're done.
@@ -286,9 +287,9 @@ end
 
 -- INFO: fuzzy finder
 vim.pack.add({
-  "https://github.com/nvim-lua/plenary.nvim",        -- library dependency
-  "https://github.com/nvim-tree/nvim-web-devicons",  -- icons (nerd font)
-  "https://github.com/nvim-telescope/telescope.nvim" -- the fuzzy finder
+    "https://github.com/nvim-lua/plenary.nvim",      -- library dependency
+    "https://github.com/nvim-tree/nvim-web-devicons", -- icons (nerd font)
+    "https://github.com/nvim-telescope/telescope.nvim" -- the fuzzy finder
 }, { confirm = false })
 
 require("telescope").setup({})
@@ -309,19 +310,19 @@ vim.keymap.set("n", "<leader>sm", pickers.man_pages, { desc = "[S]earch [M]anual
 vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" }, { confirm = false })
 
 require("lualine").setup({
-  options = {
-    section_separators = { left = "", right = "", },
-    component_separators = { left = "", right = "", },
-  },
+    options = {
+        section_separators = { left = "", right = "", },
+        component_separators = { left = "", right = "", },
+    },
 })
 
 -- INFO: keybinding helper
 vim.pack.add({ "https://github.com/folke/which-key.nvim" }, { confirm = false })
 
 require("which-key").setup({
-  spec = {
-    { "<leader>s", group = "[S]earch", icon = { icon = "", color = "green", }, },
-  }
+    spec = {
+        { "<leader>s", group = "[S]earch", icon = { icon = "", color = "green", }, },
+    }
 })
 
 -- NOTE: there are many more quality-of-life plugins available and others that
@@ -329,10 +330,10 @@ require("which-key").setup({
 
 -- INFO: utility plugins
 vim.pack.add({
-  "https://github.com/windwp/nvim-autopairs",    -- auto pairs
-  "https://github.com/VidocqH/auto-indent.nvim", -- auto indent
-  "https://github.com/numToStr/Comment.nvim",    -- gb/gc to (un)comment lines
-  "https://github.com/folke/todo-comments.nvim"  -- highlight TODO/INFO/WARN comments
+    "https://github.com/windwp/nvim-autopairs",  -- auto pairs
+    "https://github.com/VidocqH/auto-indent.nvim", -- auto indent
+    "https://github.com/numToStr/Comment.nvim",  -- gb/gc to (un)comment lines
+    "https://github.com/folke/todo-comments.nvim" -- highlight TODO/INFO/WARN comments
 }, { confirm = false })
 
 require("nvim-autopairs").setup()
@@ -343,32 +344,43 @@ require("todo-comments").setup()
 -- INFO: orgmode
 vim.pack.add({ "https://github.com/nvim-orgmode/orgmode" }, { confirm = false })
 require("orgmode").setup {
-      org_agenda_files = '~/org/*.org',
-      org_default_notes_file = '~/org/inbox.org',
-      org_todo_keywords = { 'TODO', 'WAITING', '|', 'DONE' },
-      org_cycle_separator_lines = 0,
-      org_adapt_indentation = false,
-      org_capture_templates = {
+    org_agenda_files = '~/org/*.org',
+    org_default_notes_file = '~/org/inbox.org',
+    org_todo_keywords = { 'TODO', 'WAITING', '|', 'DONE' },
+    org_cycle_separator_lines = 0,
+    org_adapt_indentation = false,
+    org_capture_templates = {
         t = {
-          description = 'Thoughts',
-          template = '%?',
-          datetree = {
-            tree_type = 'day',
-            reversed = true,
-          },
-          target = '~/org/thoughts.org',
-          properties = {
-            empty_lines = 1,
-          },
+            description = 'Thoughts',
+            template = '%?',
+            datetree = {
+                tree_type = 'day',
+                reversed = true,
+            },
+            target = '~/org/thoughts.org',
+            properties = {
+                empty_lines = 1,
+            },
         },
         w = {
-          description = 'Weekend',
-          template = '* TODO %?\n\n',
-          target = '~/org/weekend.org',
-          properties = { empty_lines = 0 },
+            description = 'Weekend',
+            template = '* TODO %?\n\n',
+            target = '~/org/weekend.org',
+            properties = { empty_lines = 0 },
         },
-      },
-    }
+    },
+}
+
+-- INFO: vim-ledger
+vim.pack.add({ "https://github.com/ledger/vim-ledger" }, { confirm = false })
+
+-- INFO: undo-tree
+vim.cmd("packadd nvim.undotree")
+vim.keymap.set("n", "<leader>u", function()
+    require("undotree").open({
+        command = math.floor(vim.api.nvim_win_get_width(0) / 3) .. "vnew",
+    })
+end, { desc = "[U]ndotree toggle" })
 
 -- uncomment to enable automatic plugin updates
 --
