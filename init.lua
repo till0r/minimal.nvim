@@ -110,6 +110,9 @@ vim.opt.inccommand = "split"
 -- show which line your cursor is on
 vim.opt.cursorline = true
 
+-- number of screen lines to keep above and below the cursor
+vim.opt.scrolloff = 5
+
 -- set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 
@@ -117,10 +120,14 @@ vim.opt.hlsearch = true
 vim.opt.wrap = true
 
 -- formatting
+vim.opt.smarttab = true
+vim.opt.expandtab = true
+vim.opt.shiftround = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.softtabstop = 4
+vim.opt.softtabstop = -1
+
+vim.opt.backspace = "indent,eol,start"
 
 vim.diagnostic.config({
     signs = {
@@ -373,6 +380,10 @@ require("orgmode").setup {
 
 -- INFO: vim-ledger
 vim.pack.add({ "https://github.com/ledger/vim-ledger" }, { confirm = false })
+vim.g.ledger_accounts_cmd = 'hledger accounts'
+vim.g.ledger_fuzzy_account_completion = 1
+vim.g.ledger_detailed_first = 1
+vim.g.ledger_accounts_spell = 1
 
 -- INFO: undo-tree
 vim.cmd("packadd nvim.undotree")
