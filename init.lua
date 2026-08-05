@@ -178,34 +178,24 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
 -- INFO: colorscheme
 vim.pack.add({ "https://github.com/loctvl842/monokai-pro.nvim" }, { confirm = false })
 vim.cmd.colorscheme("monokai-pro")
+-- Use terminal background color
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 
--- INFO: formatting and syntax highlighting
-vim.pack.add({ "https://github.com/nvim-treesitter/nvim-treesitter" }, { confirm = false })
+-- INFO: Tree-Sitter Parser
+vim.pack.add {
+    { src = "https://github.com/romus204/tree-sitter-manager.nvim" }
+}
 
--- equivalent to :TSUpdate
-require("nvim-treesitter.install").update("all")
-
-require("nvim-treesitter.configs").setup({
-    sync_install = true,
-
-    modules = {},
-    ignore_install = {},
-
-    ensure_installed = {
-        "lua",
-        "c",
-        "python",
-        "ledger"
-    },
-
-    auto_install = true, -- autoinstall languages that are not installed yet
-
-    highlight = {
-        enable = true,
+require("tree-sitter-manager").setup({
+    auto_install = true,
+    -- Use built-in Neovim treesitter parsers
+    noauto_install = {
+        "c", "lua", "markdown", "markdown_inline", "query", "vim", "vimdoc"
     },
 })
 
 -- INFO: completion engine
+vim.pack.add({ 'https://github.com/saghen/blink.lib' })
 vim.pack.add({ "https://github.com/saghen/blink.cmp" }, { confirm = false })
 
 require("blink.cmp").setup({
@@ -239,8 +229,10 @@ require("blink.cmp").setup({
     },
 })
 
--- INFO: lsp server installation and configuration
+-- Do not select first hit from completion menu automatically
+vim.cmd("set completeopt+=noselect")
 
+-- INFO: lsp server installation and configuration
 -- lsp servers we want to use and their configuration
 -- see `:h lspconfig-all` for available servers and their settings
 local lsp_servers = {
@@ -259,8 +251,8 @@ vim.pack.add({
     -- NOTE: if you'd rather install the lsps through your OS package manager you
     -- can delete the next three mason-related lines and their setup calls below.
     -- see `:h lsp-quickstart` for more details.
-    "https://github.com/mason-org/mason.nvim",                   -- package manager
-    "https://github.com/mason-org/mason-lspconfig.nvim",         -- lspconfig bridge
+    "https://github.com/mason-org/mason.nvim",                     -- package manager
+    "https://github.com/mason-org/mason-lspconfig.nvim",           -- lspconfig bridge
     "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" -- auto installer
 }, { confirm = false })
 
@@ -288,14 +280,10 @@ for server, config in pairs(lsp_servers) do
     })
 end
 
--- NOTE: if all you want is lsp + completion + highlighting, you're done.
--- the rest of the lines are just quality-of-life/appearance plugins and
--- can be removed.
-
 -- INFO: fuzzy finder
 vim.pack.add({
-    "https://github.com/nvim-lua/plenary.nvim",      -- library dependency
-    "https://github.com/nvim-tree/nvim-web-devicons", -- icons (nerd font)
+    "https://github.com/nvim-lua/plenary.nvim",        -- library dependency
+    "https://github.com/nvim-tree/nvim-web-devicons",  -- icons (nerd font)
     "https://github.com/nvim-telescope/telescope.nvim" -- the fuzzy finder
 }, { confirm = false })
 
@@ -337,13 +325,11 @@ require("which-key").setup({
 
 -- INFO: utility plugins
 vim.pack.add({
-    "https://github.com/windwp/nvim-autopairs",  -- auto pairs
     "https://github.com/VidocqH/auto-indent.nvim", -- auto indent
-    "https://github.com/numToStr/Comment.nvim",  -- gb/gc to (un)comment lines
-    "https://github.com/folke/todo-comments.nvim" -- highlight TODO/INFO/WARN comments
+    "https://github.com/numToStr/Comment.nvim",    -- gb/gc to (un)comment lines
+    "https://github.com/folke/todo-comments.nvim"  -- highlight TODO/INFO/WARN comments
 }, { confirm = false })
 
-require("nvim-autopairs").setup()
 require("auto-indent").setup()
 require("Comment").setup()
 require("todo-comments").setup()
@@ -394,5 +380,22 @@ vim.keymap.set("n", "<leader>u", function()
 end, { desc = "[U]ndotree toggle" })
 
 -- uncomment to enable automatic plugin updates
---
 -- vim.pack.update()
+
+-- INFO remove plugins from disk that are no longer in vim.pack.add() specs
+vim.api.nvim_create_user_command("PackClean", function()
+    local inactive = vim.iter(vim.pack.get())
+        :filter(function(x)
+            return not x.active
+        end)
+        :map(function(x)
+            return x.spec.name
+        end)
+        :totable()
+    if #inactive == 0 then
+        vim.notify("No inactive plugins to remove", vim.log.levels.INFO)
+        return
+    end
+    vim.pack.del(inactive)
+    vim.notify("Removed: " .. table.concat(inactive, ", "), vim.log.levels.INFO)
+end, { desc = "Remove plugins not in vim.pack.add() specs" })
