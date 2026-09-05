@@ -68,6 +68,10 @@
       "rev": "4f2d93dd914f625e2d3db47d97bd9f428fedd68f",
       "src": "https://github.com/ledger/vim-ledger"
     },
+    "vim-paper": {
+      "rev": "d8decc44569aec6247bae54d971e658bb8108399",
+      "src": "https://github.com/yorickpeterse/vim-paper.git"
+    },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
       "src": "https://github.com/folke/which-key.nvim"

@@ -175,11 +175,24 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
 -- these setup calls take a table as an agument and their expected contents can
 -- vary wildly. refer to each plugin's documentation for details.
 
--- INFO: colorscheme
+-- INFO: colorschemes
 vim.pack.add({ "https://github.com/loctvl842/monokai-pro.nvim" }, { confirm = false })
-vim.cmd.colorscheme("monokai-pro")
--- Use terminal background color
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.pack.add({ "https://github.com/yorickpeterse/vim-paper.git" }, { confirm = false })
+
+local xdg_color_scheme = vim.fn.system({
+    "busctl", "--user", "call", "org.freedesktop.portal.Desktop", "/org/freedesktop/portal/desktop",
+    "org.freedesktop.portal.Settings", "ReadOne", "ss", "org.freedesktop.appearance", "color-scheme"
+})
+
+-- The result is "v u 0" for light and "v u 1" for dark
+if xdg_color_scheme:match("u%s+(%d+)") == '1' then
+    vim.cmd.colorscheme("monokai-pro")
+    require("monokai-pro").setup({
+        transparent_background = true
+    })
+else
+    vim.cmd.colorscheme("paper")
+end
 
 -- INFO: Tree-Sitter Parser
 vim.pack.add {
