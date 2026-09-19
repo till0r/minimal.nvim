@@ -322,6 +322,20 @@ require("lualine").setup({
         section_separators = { left = "", right = "", },
         component_separators = { left = "", right = "", },
     },
+    sections = {
+        lualine_b = {
+            "branch",
+            {
+                "diff",
+                diff_color = {
+                    added    = { fg = "green" },
+                    modified = { fg = "yellow" },
+                    removed  = { fg = "red" },
+                },
+            },
+            "diagnostics",
+        },
+    },
 })
 
 -- INFO: keybinding helper
@@ -375,6 +389,9 @@ require("orgmode").setup {
             properties = { empty_lines = 0 },
         },
     },
+    org_todo_keyword_faces = {
+        DONE = ':foreground green',
+    }
 }
 
 -- INFO: vim-ledger
@@ -383,6 +400,20 @@ vim.g.ledger_accounts_cmd = 'hledger accounts'
 vim.g.ledger_fuzzy_account_completion = 1
 vim.g.ledger_detailed_first = 1
 vim.g.ledger_accounts_spell = 1
+
+-- INFO: beancount
+vim.pack.add({
+    "https://github.com/nathangrigg/vim-beancount",
+})
+
+vim.g.beancount_completion_enable = 1
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "beancount",
+    callback = function()
+        vim.b.beancount_root = vim.fn.expand("~/finance/main.beancount")
+    end,
+})
 
 -- INFO: undo-tree
 vim.cmd("packadd nvim.undotree")
