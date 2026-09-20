@@ -169,6 +169,23 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Orgmode like folding
+local foldlevel = 0
+
+vim.keymap.set("n", "<Tab>", "za", { desc = "Toggle fold" })
+
+vim.keymap.set("n", "<S-Tab>", function()
+    foldlevel = foldlevel + 1
+
+    local maxlevel = 4
+
+    if foldlevel > maxlevel then
+        foldlevel = 0
+    end
+
+    vim.opt.foldlevel = foldlevel
+end, { desc = "Cycle fold level" })
+
 -- INFO: plugins
 -- we install plugins with neovim's builtin package manager: vim.pack
 -- and then enable/configure them by calling their setup functions.
