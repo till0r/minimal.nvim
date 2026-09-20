@@ -160,6 +160,15 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
     command = 'checktime',
 })
 
+-- Spell check
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "text", "gitcommit", "org" },
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = { "en_us", "de_de" }
+  end,
+})
+
 -- INFO: plugins
 -- we install plugins with neovim's builtin package manager: vim.pack
 -- and then enable/configure them by calling their setup functions.
