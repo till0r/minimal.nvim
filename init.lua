@@ -180,12 +180,19 @@ vim.pack.add({ "https://github.com/loctvl842/monokai-pro.nvim" }, { confirm = fa
 vim.pack.add({ "https://github.com/yorickpeterse/vim-paper.git" }, { confirm = false })
 
 local xdg_color_scheme = vim.fn.system({
-    "busctl", "--user", "call", "org.freedesktop.portal.Desktop", "/org/freedesktop/portal/desktop",
-    "org.freedesktop.portal.Settings", "ReadOne", "ss", "org.freedesktop.appearance", "color-scheme"
+    "busctl", "--user", "call",
+    "org.freedesktop.portal.Desktop",
+    "/org/freedesktop/portal/desktop",
+    "org.freedesktop.portal.Settings",
+    "ReadOne", "ss",
+    "org.freedesktop.appearance",
+    "color-scheme"
 })
 
--- The result is "v u 0" for light and "v u 1" for dark
-if xdg_color_scheme:match("u%s+(%d+)") == '1' then
+-- true for dark ("v u 1"), false for light ("v u 0")
+local darkmode = xdg_color_scheme:match("u%s+(%d+)") == "1"
+
+if darkmode then
     vim.cmd.colorscheme("monokai-pro")
     require("monokai-pro").setup({
         transparent_background = true
@@ -216,17 +223,23 @@ require("blink.cmp").setup({
         documentation = {
             auto_show = true,
         },
+
+        list = {
+            selection = {
+                preselect = false,
+                auto_insert = false,
+            },
+        },
     },
 
     keymap = {
         ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
         ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+
         ['<C-y>'] = { 'select_and_accept', 'fallback' },
         ['<C-e>'] = { 'cancel', 'fallback' },
 
-        ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
-        ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
-        ['<CR>'] = { 'select_and_accept', 'fallback' },
+        ['<CR>'] = { 'fallback' },
         ['<Esc>'] = { 'cancel', 'hide_documentation', 'fallback' },
 
         ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
@@ -295,9 +308,10 @@ end
 
 -- INFO: fuzzy finder
 vim.pack.add({
-    "https://github.com/nvim-lua/plenary.nvim",        -- library dependency
-    "https://github.com/nvim-tree/nvim-web-devicons",  -- icons (nerd font)
-    "https://github.com/nvim-telescope/telescope.nvim" -- the fuzzy finder
+    "https://github.com/nvim-lua/plenary.nvim",         -- library dependency
+    "https://github.com/nvim-tree/nvim-web-devicons",   -- icons (nerd font)
+    "https://github.com/nvim-telescope/telescope.nvim", -- the fuzzy finder
+    "https://github.com/lewis6991/gitsigns.nvim"        -- git signs
 }, { confirm = false })
 
 require("telescope").setup({})
@@ -319,19 +333,19 @@ vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" }, { confirm = fal
 
 require("lualine").setup({
     options = {
-        section_separators = { left = "", right = "", },
-        component_separators = { left = "", right = "", },
+        section_separators = { left = "", right = "" },
+        component_separators = { left = "", right = "" },
     },
     sections = {
         lualine_b = {
             "branch",
             {
                 "diff",
-                diff_color = {
+                diff_color = not darkmode and { -- Auto-colors don't look good in vim paper colorscheme
                     added    = { fg = "green" },
                     modified = { fg = "yellow" },
                     removed  = { fg = "red" },
-                },
+                } or nil,
             },
             "diagnostics",
         },
