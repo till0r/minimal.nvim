@@ -402,37 +402,81 @@ require("Comment").setup()
 require("todo-comments").setup()
 
 -- INFO: orgmode
-vim.pack.add({ "https://github.com/nvim-orgmode/orgmode" }, { confirm = false })
-require("orgmode").setup {
-    org_agenda_files = '~/org/*.org',
-    org_default_notes_file = '~/org/inbox.org',
-    org_todo_keywords = { 'TODO', 'WAITING', '|', 'DONE' },
-    org_cycle_separator_lines = 0,
-    org_adapt_indentation = false,
-    org_capture_templates = {
-        t = {
-            description = 'Thoughts',
-            template = '%?',
-            datetree = {
-                tree_type = 'day',
-                reversed = true,
-            },
-            target = '~/org/thoughts.org',
-            properties = {
+vim.pack.add({ "https://github.com/xheisenbugx/org.nvim" }, { confirm = false })
+require("org").setup({
+    org_directory = "~/org",
+    agenda_files = {
+        "~/org/*.org",
+    },
+    default_notes_file = "~/org/inbox.org",
+    todo_keywords = {
+        "TODO",
+        "WAITING",
+        "|",
+        "DONE",
+    },
+    cycle_separator_lines = 0,
+    -- adapt_indentation = false,
+    startup_folded = "overview",
+    capture = {
+        templates = {
+            t = {
+                description = "Thoughts",
+                template = "%?",
+                target = "~/org/thoughts.org",
+                type = "plain",
+                datetree = {
+                    tree_type = "day",
+                },
+                prepend = true,
                 empty_lines = 1,
             },
-        },
-        w = {
-            description = 'Weekend',
-            template = '* TODO %?\n\n',
-            target = '~/org/weekend.org',
-            properties = { empty_lines = 0 },
+            w = {
+                description = "Weekend",
+                template = "* TODO %?\n\n",
+                target = "~/org/weekend.org",
+                empty_lines = 0,
+            },
         },
     },
-    org_todo_keyword_faces = {
-        DONE = ':foreground green',
-    }
-}
+    -- ui = {
+    --     todo_keyword_faces = {
+    --         DONE = ":foreground green",
+    --     },
+    -- },
+})
+
+-- vim.pack.add({ "https://github.com/nvim-orgmode/orgmode" }, { confirm = false })
+-- require("orgmode").setup {
+--     org_agenda_files = '~/org/*.org',
+--     org_default_notes_file = '~/org/inbox.org',
+--     org_todo_keywords = { 'TODO', 'WAITING', '|', 'DONE' },
+--     org_cycle_separator_lines = 0,
+--     org_adapt_indentation = false,
+--     org_capture_templates = {
+--         t = {
+--             description = 'Thoughts',
+--             template = '%?',
+--             datetree = {
+--                 tree_type = 'day',
+--                 reversed = true,
+--             },
+--             target = '~/org/thoughts.org',
+--             properties = {
+--                 empty_lines = 1,
+--             },
+--         },
+--         w = {
+--             description = 'Weekend',
+--             template = '* TODO %?\n\n',
+--             target = '~/org/weekend.org',
+--             properties = { empty_lines = 0 },
+--         },
+--     },
+--     org_todo_keyword_faces = {
+--         DONE = ':foreground green',
+--     }
+-- }
 
 -- INFO: vim-ledger
 vim.pack.add({ "https://github.com/ledger/vim-ledger" }, { confirm = false })
