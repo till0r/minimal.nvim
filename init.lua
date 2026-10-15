@@ -427,8 +427,8 @@ require("org").setup({
                 type = "plain",
                 datetree = {
                     tree_type = "day",
+                    reversed = true,
                 },
-                prepend = true,
                 empty_lines = 1,
             },
             w = {
