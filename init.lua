@@ -115,11 +115,11 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
 
 -- Spell check
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "markdown", "text", "gitcommit", "org" },
-  callback = function()
-    vim.opt_local.spell = true
-    vim.opt_local.spelllang = { "en_us", "de_de" }
-  end,
+    pattern = { "markdown", "text", "gitcommit", "org" },
+    callback = function()
+        vim.opt_local.spell = true
+        vim.opt_local.spelllang = { "en_us", "de_de" }
+    end,
 })
 
 -- Orgmode like folding
@@ -393,44 +393,27 @@ require("org").setup({
             },
         },
     },
-    -- ui = {
-    --     todo_keyword_faces = {
-    --         DONE = ":foreground green",
-    --     },
-    -- },
+    extensions = {
+        ql = {
+            files = "agenda",
+        },
+    },
+    agenda = {
+        custom_commands = {
+            p = {
+                description = "All planned tasks",
+                type = "org-ql",
+                query = "(and (todo) (or (scheduled) (deadline)))",
+                sort = "date",
+                settings = {
+                    overriding_columns_format =
+                    "%40ITEM %TODO %SCHEDULED %DEADLINE",
+                    view_columns_initially = true,
+                },
+            },
+        },
+    },
 })
-
--- vim.pack.add({ "https://github.com/nvim-orgmode/orgmode" }, { confirm = false })
--- require("orgmode").setup {
---     org_agenda_files = '~/org/*.org',
---     org_default_notes_file = '~/org/inbox.org',
---     org_todo_keywords = { 'TODO', 'WAITING', '|', 'DONE' },
---     org_cycle_separator_lines = 0,
---     org_adapt_indentation = false,
---     org_capture_templates = {
---         t = {
---             description = 'Thoughts',
---             template = '%?',
---             datetree = {
---                 tree_type = 'day',
---                 reversed = true,
---             },
---             target = '~/org/thoughts.org',
---             properties = {
---                 empty_lines = 1,
---             },
---         },
---         w = {
---             description = 'Weekend',
---             template = '* TODO %?\n\n',
---             target = '~/org/weekend.org',
---             properties = { empty_lines = 0 },
---         },
---     },
---     org_todo_keyword_faces = {
---         DONE = ':foreground green',
---     }
--- }
 
 -- INFO: vim-ledger
 vim.pack.add({ "https://github.com/ledger/vim-ledger" }, { confirm = false })
