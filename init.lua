@@ -4,6 +4,12 @@
 -- run `:h '{option_name}'` to see what they do and what values they can take.
 -- for example, `:h 'number'` for `vim.opt.number`.
 
+-- Enable UI v2
+require('vim._core.ui2').enable()
+
+-- Add border to floating windows
+vim.o.winborder = "rounded"
+
 -- set <space> as the leader key
 -- must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
@@ -91,7 +97,8 @@ vim.diagnostic.config({
             [vim.diagnostic.severity.HINT] = " ",
         },
     },
-    virtual_text = true, -- show inline diagnostics
+    virtual_text = false, -- show inline diagnostics
+    virtual_lines = { current_line = true },
 })
 
 -- clear search highlights with <Esc>
@@ -205,7 +212,7 @@ require("blink.cmp").setup({
 
         list = {
             selection = {
-                preselect = false,
+                preselect = true,
                 auto_insert = false,
             },
         },
