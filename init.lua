@@ -452,23 +452,5 @@ vim.keymap.set("n", "<leader>u", function()
     })
 end, { desc = "[U]ndotree toggle" })
 
--- uncomment to enable automatic plugin updates
--- vim.pack.update()
-
--- INFO remove plugins from disk that are no longer in vim.pack.add() specs
-vim.api.nvim_create_user_command("PackClean", function()
-    local inactive = vim.iter(vim.pack.get())
-        :filter(function(x)
-            return not x.active
-        end)
-        :map(function(x)
-            return x.spec.name
-        end)
-        :totable()
-    if #inactive == 0 then
-        vim.notify("No inactive plugins to remove", vim.log.levels.INFO)
-        return
-    end
-    vim.pack.del(inactive)
-    vim.notify("Removed: " .. table.concat(inactive, ", "), vim.log.levels.INFO)
-end, { desc = "Remove plugins not in vim.pack.add() specs" })
+-- INFO debugging
+require("config.debug")
