@@ -379,6 +379,7 @@ require("org").setup({
     cycle_separator_lines = 0,
     -- adapt_indentation = false,
     startup_folded = "overview",
+    log_done = "time",
     capture = {
         templates = {
             t = {
