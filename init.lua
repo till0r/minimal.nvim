@@ -8,7 +8,7 @@
 require('vim._core.ui2').enable()
 
 -- Add border to floating windows
-vim.o.winborder = "rounded"
+-- vim.o.winborder = "rounded"
 
 -- set <space> as the leader key
 -- must happen before plugins are loaded (otherwise wrong leader will be used)
