@@ -35,22 +35,81 @@ dap.adapters.codelldb = {
   command = "codelldb",
 }
 
+
+local function cargo_root()
+  return vim.fs.root(0, "Cargo.toml") or vim.fn.getcwd()
+end
+
 dap.configurations.rust = {
   {
-    name = "Launch Rust binary",
+    name = "Build and debug Rust",
     type = "codelldb",
     request = "launch",
+    cwd = cargo_root,
+
     program = function()
-      return vim.fn.input(
-        "Executable: ",
-        vim.fn.getcwd() .. "/target/debug/",
-        "file"
-      )
+      local root = cargo_root()
+
+      return coroutine.create(function(dap_co)
+        vim.notify("Building Rust project...")
+
+        vim.system(
+          { "cargo", "build", "--message-format=json" },
+          { cwd = root, text = true },
+          function(result)
+            vim.schedule(function()
+              local binaries = {}
+              local errors = {}
+
+              for line in (result.stdout or ""):gmatch("[^\r\n]+") do
+                local ok, msg = pcall(vim.json.decode, line)
+
+                if ok and type(msg) == "table" then
+                  if msg.reason == "compiler-artifact"
+                    and msg.executable
+                    and vim.tbl_contains(msg.target.kind, "bin")
+                  then
+                    table.insert(binaries, {
+                      name = msg.target.name,
+                      path = msg.executable,
+                    })
+                  elseif msg.reason == "compiler-message"
+                    and msg.message.level == "error"
+                  then
+                    table.insert(errors, msg.message.rendered or msg.message.message)
+                  end
+                end
+              end
+
+              if result.code ~= 0 then
+                vim.notify(
+                  "Cargo build failed:\n" .. (errors[1] or result.stderr or ""),
+                  vim.log.levels.ERROR
+                )
+                coroutine.resume(dap_co, dap.ABORT)
+              elseif #binaries == 0 then
+                vim.notify("No Rust executable found", vim.log.levels.ERROR)
+                coroutine.resume(dap_co, dap.ABORT)
+              elseif #binaries == 1 then
+                coroutine.resume(dap_co, binaries[1].path)
+              else
+                vim.ui.select(binaries, {
+                  prompt = "Select Rust binary:",
+                  format_item = function(item)
+                    return item.name .. " (" .. item.path .. ")"
+                  end,
+                }, function(choice)
+                  coroutine.resume(dap_co, choice and choice.path or dap.ABORT)
+                end)
+              end
+            end)
+          end
+        )
+      end)
     end,
-    cwd = "${workspaceFolder}",
-    stopOnEntry = false,
   },
 }
+
 
 -- Set up debugger UI
 require("dap-view").setup({
