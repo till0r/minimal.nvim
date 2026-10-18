@@ -24,6 +24,27 @@ end)
 -- Set up nvim-dap
 local dap = require("dap")
 
+-- Debugging signs
+vim.fn.sign_define("DapBreakpoint", {
+  text = "",
+  texthl = "DiagnosticError",
+})
+
+vim.fn.sign_define("DapBreakpointCondition", {
+  text = "",
+  texthl = "DiagnosticWarn",
+})
+
+vim.fn.sign_define("DapBreakpointRejected", {
+  text = "",
+  texthl = "DiagnosticError",
+})
+
+vim.fn.sign_define("DapStopped", {
+  text = "",
+  texthl = "DiagnosticInfo",
+})
+
 -- Python (uses Mason's debugpy and detects uv's .venv)
 local dap_python = require("dap-python")
 dap_python.setup("debugpy-adapter")
