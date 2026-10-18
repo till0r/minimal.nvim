@@ -423,13 +423,6 @@ require("org").setup({
     },
 })
 
--- INFO: vim-ledger
-vim.pack.add({ "https://github.com/ledger/vim-ledger" }, { confirm = false })
-vim.g.ledger_accounts_cmd = 'hledger accounts'
-vim.g.ledger_fuzzy_account_completion = 1
-vim.g.ledger_detailed_first = 1
-vim.g.ledger_accounts_spell = 1
-
 -- INFO: beancount
 vim.pack.add({
     "https://github.com/nathangrigg/vim-beancount",
