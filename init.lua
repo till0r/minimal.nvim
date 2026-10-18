@@ -241,6 +241,64 @@ require("blink.cmp").setup({
     },
 })
 
+-- Blink colors
+local highlights = {
+  -- Completion menu
+  BlinkCmpMenu = "Pmenu",
+  BlinkCmpMenuBorder = "Pmenu",
+  BlinkCmpMenuSelection = "PmenuSel",
+
+  -- Scrollbar
+  BlinkCmpScrollBarThumb = "PmenuThumb",
+  BlinkCmpScrollBarGutter = "PmenuSbar",
+
+  -- Completion items
+  BlinkCmpLabel = "Pmenu",
+  BlinkCmpLabelDeprecated = "PmenuExtra",
+  BlinkCmpLabelMatch = "Pmenu",
+  BlinkCmpLabelDetail = "PmenuExtra",
+  BlinkCmpLabelDescription = "PmenuExtra",
+  BlinkCmpKind = "PmenuKind",
+  BlinkCmpSource = "PmenuExtra",
+  BlinkCmpGhostText = "NonText",
+
+  -- Documentation: match completion menu
+  BlinkCmpDoc = "Pmenu",
+  BlinkCmpDocBorder = "Pmenu",
+  BlinkCmpDocSeparator = "Pmenu",
+  BlinkCmpDocCursorLine = "PmenuSel",
+
+  -- Signature help: match completion menu
+  BlinkCmpSignatureHelp = "Pmenu",
+  BlinkCmpSignatureHelpBorder = "Pmenu",
+  BlinkCmpSignatureHelpActiveParameter = "PmenuSel",
+}
+
+local function apply_blink_highlights()
+  for group, target in pairs(highlights) do
+    vim.api.nvim_set_hl(0, group, { link = target })
+  end
+
+  -- Individual completion kinds
+  for _, kind in ipairs({
+    "Text", "Method", "Function", "Constructor", "Field",
+    "Variable", "Class", "Interface", "Module", "Property",
+    "Unit", "Value", "Enum", "Keyword", "Snippet",
+    "Color", "File", "Reference", "Folder", "EnumMember",
+    "Constant", "Struct", "Event", "Operator", "TypeParameter",
+  }) do
+    vim.api.nvim_set_hl(0, "BlinkCmpKind" .. kind, { link = "PmenuKind" })
+  end
+end
+
+-- Apply immediately
+apply_blink_highlights()
+
+-- Reapply whenever the colorscheme changes
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = apply_blink_highlights,
+})
+
 -- Do not select first hit from completion menu automatically
 -- vim.cmd("set completeopt+=noselect")
 
