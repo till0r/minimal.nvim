@@ -183,8 +183,14 @@ if darkmode then
     --     transparent_background = true
     -- })
     require("sanzo").setup({
-        transparent = true, -- remove background
-        italic      = true, -- italicize comments and folds
+        transparent   = true, -- remove background
+        italic        = true, -- italicize comments and folds
+        on_highlights = function(hl, p)
+            hl.BlinkCmpGhostText = {
+                fg = "#B0B8C5",
+                italic = false,
+            }
+        end,
     })
     vim.cmd.colorscheme("sanzo")
 else
@@ -262,7 +268,7 @@ local highlights = {
     BlinkCmpLabelDescription = "PmenuExtra",
     BlinkCmpKind = "PmenuKind",
     BlinkCmpSource = "PmenuExtra",
-    BlinkCmpGhostText = "NonText",
+    --BlinkCmpGhostText = "NonText",
 
     -- Documentation: match completion menu
     BlinkCmpDoc = "Pmenu",
