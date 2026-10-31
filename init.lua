@@ -162,7 +162,7 @@ end, { desc = "Cycle fold level" })
 -- vary wildly. refer to each plugin's documentation for details.
 
 -- INFO: colorschemes
-vim.pack.add({ "https://github.com/loctvl842/monokai-pro.nvim" }, { confirm = false })
+vim.pack.add({ "https://codeberg.org/navahas/sanzo.nvim" }, { confirm = false })
 vim.pack.add({ "https://github.com/yorickpeterse/vim-paper.git" }, { confirm = false })
 
 local xdg_color_scheme = vim.fn.system({
@@ -179,10 +179,14 @@ local xdg_color_scheme = vim.fn.system({
 local darkmode = xdg_color_scheme:match("u%s+(%d+)") == "1"
 
 if darkmode then
-    require("monokai-pro").setup({
-        transparent_background = true
+    -- require("monokai-pro").setup({
+    --     transparent_background = true
+    -- })
+    require("sanzo").setup({
+        transparent = true, -- remove background
+        italic      = true, -- italicize comments and folds
     })
-    vim.cmd.colorscheme("monokai-pro")
+    vim.cmd.colorscheme("sanzo")
 else
     vim.cmd.colorscheme("paper")
 end
@@ -243,52 +247,52 @@ require("blink.cmp").setup({
 
 -- Blink colors
 local highlights = {
-  -- Completion menu
-  BlinkCmpMenu = "Pmenu",
-  BlinkCmpMenuBorder = "Pmenu",
-  BlinkCmpMenuSelection = "PmenuSel",
+    -- Completion menu
+    BlinkCmpMenu = "Pmenu",
+    BlinkCmpMenuBorder = "Pmenu",
+    BlinkCmpMenuSelection = "PmenuSel",
 
-  -- Scrollbar
-  BlinkCmpScrollBarThumb = "PmenuThumb",
-  BlinkCmpScrollBarGutter = "PmenuSbar",
+    -- Scrollbar
+    BlinkCmpScrollBarThumb = "PmenuThumb",
+    BlinkCmpScrollBarGutter = "PmenuSbar",
 
-  -- Completion items
-  BlinkCmpLabel = "Pmenu",
-  BlinkCmpLabelDeprecated = "PmenuExtra",
-  BlinkCmpLabelMatch = "Pmenu",
-  BlinkCmpLabelDetail = "PmenuExtra",
-  BlinkCmpLabelDescription = "PmenuExtra",
-  BlinkCmpKind = "PmenuKind",
-  BlinkCmpSource = "PmenuExtra",
-  BlinkCmpGhostText = "NonText",
+    -- Completion items
+    BlinkCmpLabel = "Pmenu",
+    BlinkCmpLabelDeprecated = "PmenuExtra",
+    BlinkCmpLabelMatch = "Pmenu",
+    BlinkCmpLabelDetail = "PmenuExtra",
+    BlinkCmpLabelDescription = "PmenuExtra",
+    BlinkCmpKind = "PmenuKind",
+    BlinkCmpSource = "PmenuExtra",
+    BlinkCmpGhostText = "NonText",
 
-  -- Documentation: match completion menu
-  BlinkCmpDoc = "Pmenu",
-  BlinkCmpDocBorder = "Pmenu",
-  BlinkCmpDocSeparator = "Pmenu",
-  BlinkCmpDocCursorLine = "PmenuSel",
+    -- Documentation: match completion menu
+    BlinkCmpDoc = "Pmenu",
+    BlinkCmpDocBorder = "Pmenu",
+    BlinkCmpDocSeparator = "Pmenu",
+    BlinkCmpDocCursorLine = "PmenuSel",
 
-  -- Signature help: match completion menu
-  BlinkCmpSignatureHelp = "Pmenu",
-  BlinkCmpSignatureHelpBorder = "Pmenu",
-  BlinkCmpSignatureHelpActiveParameter = "PmenuSel",
+    -- Signature help: match completion menu
+    BlinkCmpSignatureHelp = "Pmenu",
+    BlinkCmpSignatureHelpBorder = "Pmenu",
+    BlinkCmpSignatureHelpActiveParameter = "PmenuSel",
 }
 
 local function apply_blink_highlights()
-  for group, target in pairs(highlights) do
-    vim.api.nvim_set_hl(0, group, { link = target })
-  end
+    for group, target in pairs(highlights) do
+        vim.api.nvim_set_hl(0, group, { link = target })
+    end
 
-  -- Individual completion kinds
-  for _, kind in ipairs({
-    "Text", "Method", "Function", "Constructor", "Field",
-    "Variable", "Class", "Interface", "Module", "Property",
-    "Unit", "Value", "Enum", "Keyword", "Snippet",
-    "Color", "File", "Reference", "Folder", "EnumMember",
-    "Constant", "Struct", "Event", "Operator", "TypeParameter",
-  }) do
-    vim.api.nvim_set_hl(0, "BlinkCmpKind" .. kind, { link = "PmenuKind" })
-  end
+    -- Individual completion kinds
+    for _, kind in ipairs({
+        "Text", "Method", "Function", "Constructor", "Field",
+        "Variable", "Class", "Interface", "Module", "Property",
+        "Unit", "Value", "Enum", "Keyword", "Snippet",
+        "Color", "File", "Reference", "Folder", "EnumMember",
+        "Constant", "Struct", "Event", "Operator", "TypeParameter",
+    }) do
+        vim.api.nvim_set_hl(0, "BlinkCmpKind" .. kind, { link = "PmenuKind" })
+    end
 end
 
 -- Apply immediately
@@ -296,7 +300,7 @@ apply_blink_highlights()
 
 -- Reapply whenever the colorscheme changes
 vim.api.nvim_create_autocmd("ColorScheme", {
-  callback = apply_blink_highlights,
+    callback = apply_blink_highlights,
 })
 
 -- Do not select first hit from completion menu automatically
@@ -483,16 +487,42 @@ require("org").setup({
 
 -- INFO: beancount
 vim.pack.add({
-    "https://github.com/nathangrigg/vim-beancount",
-})
+    "https://github.com/hxueh/beancount.nvim" }, { confirm = false }
+)
 
-vim.g.beancount_completion_enable = 1
+require("beancount").setup({
+    instant_alignment = true,
+    auto_format_on_save = true,
 
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "beancount",
-    callback = function()
-        vim.b.beancount_root = vim.fn.expand("~/finance/main.beancount")
-    end,
+    -- Completion & input
+    complete_payee_narration = true, -- Include payees/narrations
+
+    -- Files & paths
+    main_bean_file = "/home/till/finance/main.beancount", -- Auto-detect main.bean/main.beancount
+    python_path = "/home/till/repos/bfledger/.venv/bin/python",
+
+    -- Features
+    inlay_hints = true,           -- Show inferred amounts
+    snippets = {
+        enabled = true,           -- Enable snippet support
+        date_format = "%Y-%m-%d", -- Date format for snippets
+    },
+
+    -- Key mappings (customizable)
+    keymaps = {
+        goto_definition = "grd", -- Go to definition
+        references = "grr",      -- Find account, tag, or link references
+        next_transaction = "]]", -- Next transaction
+        prev_transaction = "[[", -- Previous transaction
+    },
+
+    -- UI settings
+    ui = {
+        virtual_text = true,      -- Show diagnostics as virtual text
+        signs = true,             -- Show diagnostic signs
+        update_in_insert = false, -- Don't update while typing
+        severity_sort = true,     -- Sort by severity
+    },
 })
 
 -- INFO: undo-tree

@@ -4,12 +4,20 @@
       "rev": "e30b7f2008e52442154b66f7c519bfd2f1e32acb",
       "src": "https://github.com/numToStr/Comment.nvim"
     },
+    "Zenburn": {
+      "rev": "9d7988abf0d2654f837fcd288145afd5f316b70c",
+      "src": "https://github.com/jnurmine/Zenburn"
+    },
     "auto-indent.nvim": {
       "rev": "46801cf8857d42a20a73c40b0a5d3dfe8b2b6192",
       "src": "https://github.com/VidocqH/auto-indent.nvim"
     },
+    "beancount.nvim": {
+      "rev": "7040bd4402289ee20c033a9d1f243ec4d44942dd",
+      "src": "https://github.com/hxueh/beancount.nvim"
+    },
     "blink.cmp": {
-      "rev": "10198f904da1e7f77aeb0368414f871568c0d898",
+      "rev": "1e4cb39b9200950dca1cbc4d630c60c16eb8e7e4",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
@@ -17,7 +25,7 @@
       "src": "https://github.com/saghen/blink.lib"
     },
     "gitsigns.nvim": {
-      "rev": "fd780920613e541cbdfac41bf711583ed49f9249",
+      "rev": "d4854fa9a94b5c8b37dd209fb4a19e98e764186f",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "kanagawa.nvim": {
@@ -29,7 +37,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mason-lspconfig.nvim": {
-      "rev": "00b5473cca4db5b410ff4bae724e3b6e21f2687f",
+      "rev": "a338f44149f5673882c32629697d67b0c0547aec",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
     },
     "mason-tool-installer.nvim": {
@@ -62,7 +70,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "nvim-lspconfig": {
-      "rev": "45a3a444b710511c39abca3b60bb6e23a21e3de5",
+      "rev": "77b7432d4770d23b277d37923e5a08a442d8bb07",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -74,16 +82,20 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "org.nvim": {
-      "rev": "6714808855910b25356fbc583fa38015315dea18",
+      "rev": "7d178458e575bcc6bde83f8177223644f03404a2",
       "src": "https://github.com/xheisenbugx/org.nvim"
     },
     "orgmode": {
-      "rev": "78c9928c151ff6ec07fd72da74bdf50a8034f0a5",
+      "rev": "61274cfda2cb5878f5587d4fab0429ec356d4ec8",
       "src": "https://github.com/nvim-orgmode/orgmode"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "sanzo.nvim": {
+      "rev": "47b46a5b446f24b6c698ac994f6303c515d0732b",
+      "src": "https://codeberg.org/navahas/sanzo.nvim"
     },
     "telescope.nvim": {
       "rev": "40aedd8a68c78a656a10a8d62d80c54af59420fb",
@@ -94,7 +106,7 @@
       "src": "https://github.com/folke/todo-comments.nvim"
     },
     "tree-sitter-manager.nvim": {
-      "rev": "27cf9c8a3767b070c22f31e92451006ee2e43540",
+      "rev": "06c90a3af8eb471f4a4ff979d681312284a8583a",
       "src": "https://github.com/romus204/tree-sitter-manager.nvim"
     },
     "vim-beancount": {
@@ -112,6 +124,10 @@
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
       "src": "https://github.com/folke/which-key.nvim"
+    },
+    "zenburn.nvim": {
+      "rev": "f5ee12b30119499c7fa7f95719cd7c5aab9f9f29",
+      "src": "https://github.com/phha/zenburn.nvim"
     }
   }
 }
