@@ -162,7 +162,7 @@ end, { desc = "Cycle fold level" })
 -- vary wildly. refer to each plugin's documentation for details.
 
 -- INFO: colorschemes
-vim.pack.add({ "https://codeberg.org/navahas/sanzo.nvim" }, { confirm = false })
+vim.pack.add({ "https://github.com/silentium-theme/silentium.nvim" }, { confirm = false })
 vim.pack.add({ "https://github.com/yorickpeterse/vim-paper.git" }, { confirm = false })
 
 local xdg_color_scheme = vim.fn.system({
@@ -182,17 +182,17 @@ if darkmode then
     -- require("monokai-pro").setup({
     --     transparent_background = true
     -- })
-    require("sanzo").setup({
-        transparent   = true, -- remove background
-        italic        = true, -- italicize comments and folds
-        on_highlights = function(hl, p)
-            hl.BlinkCmpGhostText = {
-                fg = "#B0B8C5",
-                italic = false,
-            }
-        end,
-    })
-    vim.cmd.colorscheme("sanzo")
+    -- require("sanzo").setup({
+    --     transparent   = true, -- remove background
+    --     italic        = true, -- italicize comments and folds
+    --     on_highlights = function(hl, p)
+    --         hl.BlinkCmpGhostText = {
+    --             fg = "#B0B8C5",
+    --             italic = false,
+    --         }
+    --     end,
+    -- })
+    vim.cmd.colorscheme("silentium")
 else
     vim.cmd.colorscheme("paper")
 end
@@ -300,12 +300,12 @@ local function apply_blink_highlights()
 end
 
 -- Apply immediately
-apply_blink_highlights()
+-- apply_blink_highlights()
 
 -- Reapply whenever the colorscheme changes
-vim.api.nvim_create_autocmd("ColorScheme", {
-    callback = apply_blink_highlights,
-})
+-- vim.api.nvim_create_autocmd("ColorScheme", {
+--     callback = apply_blink_highlights,
+-- })
 
 -- Do not select first hit from completion menu automatically
 -- vim.cmd("set completeopt+=noselect")
