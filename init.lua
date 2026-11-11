@@ -324,6 +324,35 @@ local lsp_servers = {
     rust_analyzer = {},
 }
 
+-- Extra hints for Rust
+vim.lsp.config("rust_analyzer", {
+    settings = {
+        ["rust-analyzer"] = {
+            inlayHints = {
+                closureCaptureHints = {
+                    enable = true,
+                },
+                expressionAdjustmentHints = {
+                    enable = "always",
+                    disableReborrows = false,
+                },
+                bindingModeHints = {
+                    enable = true,
+                },
+            },
+        },
+    },
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if client and client:supports_method("textDocument/inlayHint") then
+            vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+        end
+    end,
+})
+
 vim.pack.add({
     "https://github.com/neovim/nvim-lspconfig", -- default configs for lsps
 
