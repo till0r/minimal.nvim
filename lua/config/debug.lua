@@ -46,6 +46,7 @@ vim.fn.sign_define("DapStopped", {
 })
 
 -- Python (uses Mason's debugpy and detects uv's .venv)
+require("dap-python").setup("uv")
 local dap_python = require("dap-python")
 dap_python.setup("debugpy-adapter")
 dap_python.test_runner = "pytest"
