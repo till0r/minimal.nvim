@@ -2,7 +2,6 @@
 -- these change the default neovim behaviours using the 'vim.opt' API.
 -- see `:h vim.opt` for more details.
 -- run `:h '{option_name}'` to see what they do and what values they can take.
--- for example, `:h 'number'` for `vim.opt.number`.
 
 -- Enable UI v2
 require('vim._core.ui2').enable()
@@ -395,6 +394,28 @@ vim.pack.add({
     "https://github.com/nvim-telescope/telescope.nvim", -- the fuzzy finder
     "https://github.com/lewis6991/gitsigns.nvim"        -- git signs
 }, { confirm = false })
+
+require("gitsigns").setup({
+    on_attach = function(bufnr)
+        local gs = require("gitsigns")
+
+        vim.keymap.set("n", "]c", function()
+            if vim.wo.diff then
+                vim.cmd.normal({ "]c", bang = true })
+            else
+                gs.nav_hunk("next")
+            end
+        end, { buffer = bufnr, desc = "Next Git change" })
+
+        vim.keymap.set("n", "[c", function()
+            if vim.wo.diff then
+                vim.cmd.normal({ "[c", bang = true })
+            else
+                gs.nav_hunk("prev")
+            end
+        end, { buffer = bufnr, desc = "Previous Git change" })
+    end,
+})
 
 require("telescope").setup({})
 
