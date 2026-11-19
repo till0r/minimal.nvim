@@ -164,45 +164,29 @@ end, { desc = "Cycle fold level" })
 vim.pack.add({ "https://github.com/silentium-theme/silentium.nvim" }, { confirm = false })
 vim.pack.add({ "https://github.com/yorickpeterse/vim-paper.git" }, { confirm = false })
 
-local xdg_color_scheme = vim.fn.system({
-    "busctl", "--user", "call",
-    "org.freedesktop.portal.Desktop",
-    "/org/freedesktop/portal/desktop",
-    "org.freedesktop.portal.Settings",
-    "ReadOne", "ss",
-    "org.freedesktop.appearance",
-    "color-scheme"
+require("silentium").setup({
+    light_gray = "#B8B8B8",
+    gray       = "#909090",
+    ghost      = "#686868",
+    dark_gray  = "#444444",
+    dark       = "#2C2C2C",
+    black      = "#1C1C1C",
 })
 
--- true for dark ("v u 1"), false for light ("v u 0")
-local darkmode = xdg_color_scheme:match("u%s+(%d+)") == "1"
+local function update_colorscheme()
+  local theme = vim.o.background == "dark"
+      and "silentium"
+      or "paper"
 
-if darkmode then
-    -- require("monokai-pro").setup({
-    --     transparent_background = true
-    -- })
-    -- require("sanzo").setup({
-    --     transparent   = true, -- remove background
-    --     italic        = true, -- italicize comments and folds
-    --     on_highlights = function(hl, p)
-    --         hl.BlinkCmpGhostText = {
-    --             fg = "#B0B8C5",
-    --             italic = false,
-    --         }
-    --     end,
-    -- })
-    require("silentium").setup({
-        light_gray = "#B8B8B8",
-        gray       = "#909090",
-        ghost      = "#686868",
-        dark_gray  = "#444444",
-        dark       = "#2C2C2C",
-        black      = "#1C1C1C",
-    })
-    vim.cmd.colorscheme("silentium")
-else
-    vim.cmd.colorscheme("paper")
+  vim.cmd.colorscheme(theme)
 end
+
+vim.api.nvim_create_autocmd("OptionSet", {
+  pattern = "background",
+  callback = update_colorscheme,
+})
+
+update_colorscheme()
 
 -- INFO: Tree-Sitter Parser
 vim.pack.add {
@@ -553,11 +537,12 @@ require("org").setup({
                 {
                     name = "Todos",
                     inbox = "~/org/todos.org",
-                    direction = "pull",
                     url = oo7("url"),
                     user = oo7("username"),
                     password = oo7("password"),
-                    todos = true
+                    todos = true,
+                    interval = 15,
+                    direction = "twoway"
                 },
             },
         },
@@ -578,6 +563,9 @@ require("org").setup({
         },
     },
 })
+
+vim.api.nvim_set_hl(0, "OrgTodo", { link = "Normal" })
+vim.api.nvim_set_hl(0, "OrgDone", { link = "Normal" })
 
 -- INFO: beancount
 vim.pack.add({
