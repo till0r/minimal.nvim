@@ -191,6 +191,14 @@ if darkmode then
     --         }
     --     end,
     -- })
+    require("silentium").setup({
+        light_gray = "#B8B8B8",
+        gray       = "#909090",
+        ghost      = "#686868",
+        dark_gray  = "#444444",
+        dark       = "#2C2C2C",
+        black      = "#1C1C1C",
+    })
     vim.cmd.colorscheme("silentium")
 else
     vim.cmd.colorscheme("paper")
@@ -299,15 +307,12 @@ local function apply_blink_highlights()
 end
 
 -- Apply immediately
--- apply_blink_highlights()
+apply_blink_highlights()
 
 -- Reapply whenever the colorscheme changes
--- vim.api.nvim_create_autocmd("ColorScheme", {
---     callback = apply_blink_highlights,
--- })
-
--- Do not select first hit from completion menu automatically
--- vim.cmd("set completeopt+=noselect")
+vim.api.nvim_create_autocmd("ColorScheme", {
+    callback = apply_blink_highlights,
+})
 
 -- INFO: lsp server installation and configuration
 -- lsp servers we want to use and their configuration
@@ -464,9 +469,6 @@ require("which-key").setup({
     }
 })
 
--- NOTE: there are many more quality-of-life plugins available and others that
--- achieve what these do. these are just our recommendations to start.
-
 -- INFO: utility plugins
 vim.pack.add({
     "https://github.com/VidocqH/auto-indent.nvim", -- auto indent
@@ -479,11 +481,36 @@ require("Comment").setup()
 require("todo-comments").setup()
 
 -- INFO: orgmode
+local function oo7(field)
+  local result = vim.system({
+    "oo7-cli",
+    "lookup",
+    "--secret-only",
+    "app=org-nvim-caldav",
+    "profile=personal",
+    "field=" .. field,
+  }, { text = true }):wait()
+
+  if result.code ~= 0 then
+    error("oo7 lookup failed for " .. field .. ": "
+      .. (result.stderr or "unknown error"))
+  end
+
+  local value = result.stdout or ""
+
+  if value == "" then
+    error("Missing or empty oo7 value: " .. field)
+  end
+
+  return value
+end
+
+
 vim.pack.add({ "https://github.com/xheisenbugx/org.nvim" }, { confirm = false })
 require("org").setup({
     org_directory = "~/org",
     agenda_files = {
-        "~/org/*.org",
+        "~/org/*.org", "~/org/todos.org"
     },
     default_notes_file = "~/org/inbox.org",
     todo_keywords = {
@@ -520,6 +547,19 @@ require("org").setup({
     extensions = {
         ql = {
             files = "agenda",
+        },
+        caldav = {
+            calendars = {
+                {
+                    name = "Todos",
+                    inbox = "~/org/todos.org",
+                    direction = "pull",
+                    url = oo7("url"),
+                    user = oo7("username"),
+                    password = oo7("password"),
+                    todos = true
+                },
+            },
         },
     },
     agenda = {
@@ -586,6 +626,3 @@ vim.keymap.set("n", "<leader>u", function()
         command = math.floor(vim.api.nvim_win_get_width(0) / 3) .. "vnew",
     })
 end, { desc = "[U]ndotree toggle" })
-
--- INFO debugging
-require("config.debug")
